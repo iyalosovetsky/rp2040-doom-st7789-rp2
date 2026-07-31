@@ -27,15 +27,18 @@
 
 #ifdef ILI9341
 #define SCREENWIDTH  320
+#define SCREENWIDTH_REAL  320
 #define SCREENHEIGHT 200
 #endif
 #ifdef ST7789
 #define SCREENWIDTH  320
+#define SCREENWIDTH_REAL  320
 #define SCREENHEIGHT 200
 #endif
 
 #ifndef SCREENWIDTH
 #define SCREENWIDTH  320
+#define SCREENWIDTH_REAL  320
 #define SCREENHEIGHT 200
 #endif
 

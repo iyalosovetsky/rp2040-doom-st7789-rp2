@@ -665,8 +665,12 @@ void piconet_init() {
     gpio_pull_up(PICO_DEFAULT_I2C_SCL_PIN);
     irq_set_exclusive_handler(I2C_IRQ, i2c_irq_handler);
     hardware_alarm_set_callback(PERIODIC_ALARM_NUM, periodic_tick);
-    irq_set_priority(TIMER_IRQ_0 + PERIODIC_ALARM_NUM, 0xc0); // don't want timer pre-empting the other IRQs
-    irq_set_enabled(TIMER_IRQ_0 + PERIODIC_ALARM_NUM, true); // no harm turning it on
+    // irq_set_priority(TIMER_IRQ_0 + PERIODIC_ALARM_NUM, 0xc0); // don't want timer pre-empting the other IRQs
+    // irq_set_enabled(TIMER_IRQ_0 + PERIODIC_ALARM_NUM, true); // no harm turning it on
+
+    irq_set_priority(TIMER1_IRQ_0 + PERIODIC_ALARM_NUM, 0xc0); // don't want timer pre-empting the other IRQs
+    irq_set_enabled(TIMER1_IRQ_0 + PERIODIC_ALARM_NUM, true); // no harm turning it on
+
 }
 
 static void clear_state() {

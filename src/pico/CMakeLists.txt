@@ -68,16 +68,49 @@ set(SD_MOSI "11" CACHE STRING "Select the Master Out Slave In GPIO pin for the S
 set(SD_MISO "12" CACHE STRING "Select the Master In Slave Out GPIO pin for the SD card")
 
 set(LCD_CONTROLLER "ILI9341" CACHE STRING "Select the LCD controller type")
-#set(LCD_CONTROLLER "ST7789" CACHE STRING "Select the LCD controller type")
+#ig
+# set(LCD_CONTROLLER "ST7789" CACHE STRING "Select the LCD controller type")
+#ig
+#set(LCD_SPI "spi0")
+#set(LCD_DC "20")
+#set(LCD_CS "17")
+#set(LCD_CLK "18")
+#set(LCD_MOSI "19")
+#set(LCD_RST "21")
+#set(LCD_BL "22")
+#set(LCD_MISO "-1")
 
-set(LCD_SPI "spi0")
-set(LCD_DC "20")
-set(LCD_CS "17")
-set(LCD_CLK "18")
-set(LCD_MOSI "19")
-set(LCD_RST "21")
-set(LCD_BL "22")
+# Waveshare Pico-ResTouch-LCD-2.8 (ST7789, 320x240)
+# https://www.waveshare.com/wiki/Pico-ResTouch-LCD-2.8
+set(LCD_SPI "spi1")
+set(LCD_DC "8")
+set(LCD_CS "9")
+set(LCD_CLK "10")
+set(LCD_MOSI "11")
+set(LCD_RST "15")  # LCD_RST -> GP15 (Low active)
+set(LCD_BL "13")   # LCD_BL  -> GP13 (Backlight control)
 set(LCD_MISO "-1")
+
+# Touch controller XPT2046
+set(TOUCH_CS "16")  # TP_CS -> GP16 (Low active)
+set(TOUCH_IRQ "17") # TP_IRQ -> GP17 (Low active, interrupt)
+
+# SD card CS - disable by keeping high (inactive)
+set(SDCARD_DISABLE_PIN "22") # SD_CS/D3 -> GP22 (Low active)
+
+# Button pins (defaults for Waveshare Pico-ResTouch-LCD-2.8)
+#set(BUTTON_UP "0")   # UP  -> GP0
+#set(BUTTON_DN "1")   # DN  -> GP1
+set(BUTTON_UP "0")   # UP  -> GP0
+set(BUTTON_DN "1")   # DN  -> GP1
+set(BUTTON_LT "14")  # LT  -> GP14 (moved from touch pin 16)
+set(BUTTON_RT "18")  # RT  -> GP18 (moved from touch pin 17)
+set(BUTTON_SL "5")   # SL  -> GP5 (moved from I2S pin 28)
+set(BUTTON_ST "6")   # ST  -> GP6 (moved from I2S pin 27)
+#set(BUTTON_A "7")    # A   -> GP7 (moved from I2S pin 26)
+set(BUTTON_A "24")    # A   -> GP7 (moved from I2S pin 26)
+set(BUTTON_B "7")     # B   -> GP7 (moved from GP20 for PIO USB D+)
+
 
 message("SD card SPI         : ${SD_SPI}")
 message("SD card CS          : ${SD_CS}")
@@ -93,6 +126,17 @@ message("LCD MOSI            : ${LCD_MOSI}")
 message("LCD RST             : ${LCD_RST}")
 message("LCD BL              : ${LCD_BL}")
 message("LCD MISO            : ${LCD_MISO}")
+message("TOUCH CS            : ${TOUCH_CS}")
+message("TOUCH IRQ           : ${TOUCH_IRQ}")
+message("SDCARD DISABLE PIN  : ${SDCARD_DISABLE_PIN}")
+message("BUTTON UP           : ${BUTTON_UP}")
+message("BUTTON DN           : ${BUTTON_DN}")
+message("BUTTON LT           : ${BUTTON_LT}")
+message("BUTTON RT           : ${BUTTON_RT}")
+message("BUTTON SL           : ${BUTTON_SL}")
+message("BUTTON ST           : ${BUTTON_ST}")
+message("BUTTON A            : ${BUTTON_A}")
+message("BUTTON B            : ${BUTTON_B}")
 target_compile_definitions(common_pico INTERFACE
     SDCARD_SPI_BUS=${SD_SPI}
     SDCARD_PIN_SPI0_CS=${SD_CS}
@@ -107,6 +151,17 @@ target_compile_definitions(common_pico INTERFACE
     DISPLAY_PIN_RST=${LCD_RST}
     DISPLAY_PIN_BL=${LCD_BL}
     DISPLAY_PIN_MISO=${LCD_MISO}
+    TOUCH_CS=${TOUCH_CS}
+    TOUCH_IRQ=${TOUCH_IRQ}
+    SDCARD_DISABLE_PIN=${SDCARD_DISABLE_PIN}
+    BTN_UP=${BUTTON_UP}
+    BTN_DN=${BUTTON_DN}
+    BTN_LT=${BUTTON_LT}
+    BTN_RT=${BUTTON_RT}
+    BTN_SL=${BUTTON_SL}
+    BTN_ST=${BUTTON_ST}
+    BTN_A=${BUTTON_A}
+    BTN_B=${BUTTON_B}
 )
 
     #target_link_libraries(common_pico INTERFACE  hardware_pwm)

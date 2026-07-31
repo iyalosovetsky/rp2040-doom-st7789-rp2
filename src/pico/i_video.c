@@ -1033,6 +1033,8 @@ void __no_inline_not_in_flash_func(new_frame_stuff)() {
 //dahai
  // void display_set_address(uint16_t x1, uint16_t y1, uint16_t x2, uint16_t y2);
 void ili9341_infones_frame_timing_register_init();
+void st7789_infones_frame_timing_register_init();
+
 void /*__scratch_x("scanlines")*/ fill_scanlines() {
 #if 1
 //dahai
@@ -1143,21 +1145,16 @@ void /*__scratch_x("scanlines")*/ fill_scanlines() {
         //     // spi_write_blocking(DISPLAY_SPI_PORT, &(buffer->data[i]), 2);
         // }
         // // spi_write_blocking(DISPLAY_SPI_PORT, scanline_buffer, 2*SCREENWIDTH);
-        
+
         spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&(buffer->data[2])+1, 2*SCREENWIDTH);
 
         // dma_channel_set_trans_count(display_dma_channel, SCREENWIDTH*sizeof(uint16_t), false);
-        // dma_channel_set_read_addr(display_dma_channel, /*(uint8_t *)*/scanline_buffer, true);   
+        // dma_channel_set_read_addr(display_dma_channel, /*(uint8_t *)*/scanline_buffer, true);
 #endif
 #ifdef ST7789
-        for(int i=0,j=2; j<SCREENWIDTH*2; i+=2,j+=4){
-           memcpy((uint8_t *)&(buffer->data[2])+i+0 , (uint8_t *)&(buffer->data[2])+j+0, sizeof(uint8_t));
-           memcpy((uint8_t *)&(buffer->data[2])+i+1 , (uint8_t *)&(buffer->data[2])+j+1, sizeof(uint8_t));
-        }
-        if(scanline%2 == 0){
-          spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&(buffer->data[2])+1, 1*SCREENWIDTH);
-        }
+        spi_write_blocking(DISPLAY_SPI_PORT, (uint8_t *)&(buffer->data[2])+1, 2*SCREENWIDTH);
 #endif
+
 //dahai
         // *((io_rw_32 *) (PPB_BASE + M0PLUS_NVIC_ISPR_OFFSET)) = 1u << 31;
 
@@ -1187,7 +1184,9 @@ void /*__scratch_x("scanlines")*/ fill_scanlines() {
 static void __not_in_flash_func(free_buffer_callback)() {
 //    irq_set_pending(LOW_PRIO_IRQ);
     // ^ is in flash by default
-    *((io_rw_32 *) (PPB_BASE + M0PLUS_NVIC_ISPR_OFFSET)) = 1u << LOW_PRIO_IRQ;
+    //ig *((io_rw_32 *) (PPB_BASE + M0PLUS_NVIC_ISPR_OFFSET)) = 1u << LOW_PRIO_IRQ;
+    *((io_rw_32 *) (PPB_BASE + M33_NVIC_ISPR0_OFFSET)) = 1u << LOW_PRIO_IRQ;
+    
 }
 #endif
 

@@ -31,6 +31,7 @@
 #include "pico/multicore.h"
 #if PICO_ON_DEVICE
 #include "hardware/vreg.h"
+#include "hardware/clocks.h"
 #endif
 #endif
 #if USE_PICO_NET

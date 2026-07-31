@@ -21,6 +21,7 @@
 #ifndef __P_SAVEG__
 #define __P_SAVEG__
 
+#include <sys/types.h>
 #include <stdio.h>
 
 #define SAVEGAME_EOF 0x1d

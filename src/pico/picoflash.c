@@ -19,6 +19,8 @@
 // NULL in LR, instructing boot2 to enter flash vector table's reset handler.
 
 #define BOOT2_SIZE_WORDS 64
+// ig added
+void watchdog_update(void);
 
 static void __no_inline_not_in_flash_func(flash_init_boot2_copyout)(uint32_t boot2_copyout[BOOT2_SIZE_WORDS]) {
 #if PICO_RP2040
