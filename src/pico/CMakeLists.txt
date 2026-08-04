@@ -34,6 +34,7 @@ target_include_directories(common_pico INTERFACE
 
 target_compile_definitions(common_pico INTERFACE
         NO_USE_MOUSE=1
+        YELLOW_SUBMARINE=0
         #dahai
         #PICO_AUDIO_I2S_PIO=1
         PICO_AUDIO_I2S_PIO=2
@@ -110,7 +111,7 @@ set(BUTTON_SL "5")   # SL  -> GP5 (moved from I2S pin 28)
 set(BUTTON_ST "6")   # ST  -> GP6 (moved from I2S pin 27)
 #set(BUTTON_A "7")    # A   -> GP7 (moved from I2S pin 26)
 set(BUTTON_A "24")    # A   -> GP7 (moved from I2S pin 26)
-set(BUTTON_B "7")     # B   -> GP7 (moved from GP20 for PIO USB D+)
+set(BUTTON_B "20")     # B   -> GP20 (changed to use GPIO 2 for USB D+ instead of default GP19/D- and GP20/D+) 
 
 
 message("SD card SPI         : ${SD_SPI}")

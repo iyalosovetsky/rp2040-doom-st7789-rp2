@@ -34,16 +34,22 @@
 // COMMON CONFIGURATION
 //--------------------------------------------------------------------
 
-// defined by compiler flags for flexibility
 #ifndef CFG_TUSB_MCU
-  #error CFG_TUSB_MCU must be defined
+  #define CFG_TUSB_MCU OPT_MCU_RP2350
 #endif
 
-#if CFG_TUSB_MCU == OPT_MCU_LPC43XX || CFG_TUSB_MCU == OPT_MCU_LPC18XX || CFG_TUSB_MCU == OPT_MCU_MIMXRT10XX
-  #define CFG_TUSB_RHPORT0_MODE       (OPT_MODE_HOST | OPT_MODE_HIGH_SPEED)
-#else
-  #define CFG_TUSB_RHPORT0_MODE       OPT_MODE_HOST
+// Вмикаємо режим HOST, оскільки ви використовуєте TinyUSB для підключення пристроїв (миші/клавіатури)
+#define CFG_TUSB_RHPORT0_MODE       OPT_MODE_HOST
+
+// --- НАЛАШТУВАННЯ PIO-USB ---
+// Вказуємо, що порт 0 працює через програмний драйвер PIO-USB
+#define CFG_TUSB_RHPORT0_PIO_USB    1
+
+// Налаштування пінів для Pico-PIO-USB
+#ifndef PICO_DEFAULT_PIO_USB_DP_PIN
+  #define PICO_DEFAULT_PIO_USB_DP_PIN   2   // D+ на GP2 (D- автоматично стане на GP3)
 #endif
+// ----------------------------
 
 #ifndef CFG_TUSB_OS
 #define CFG_TUSB_OS                 OPT_OS_NONE
@@ -68,28 +74,25 @@
 #endif
 
 #define USB_MAX_ENDPOINTS 4
+
 //--------------------------------------------------------------------
-// CONFIGURATION
+// CONFIGURATION (HOST MODE)
 //--------------------------------------------------------------------
 
-// Size of buffer to hold descriptors and other data used for enumeration
-#define CFG_TUH_ENUMERATION_BUFSIZE 128
+#define CFG_TUH_ENUMERATION_BUFSIZE 256  // Збільшено для кращої сумісності з пристроями
 
 #define CFG_TUH_HUB                 1
 #define CFG_TUH_CDC                 0
 #define CFG_TUH_MSC                 0
 #define CFG_TUH_VENDOR              0
 
-// max device support (excluding hub device)
-//#define CFG_TUH_DEVICE_MAX          (CFG_TUH_HUB ? 4 : 1) // hub typically has 4 ports
-// note tinyusb is very wasteful on space
-#define CFG_TUH_DEVICE_MAX          1
-#define CFG_TUH_HID                 4 // typical keyboard + mouse device can have 3-4 HID interfaces
+// Налаштування для підтримки клавіатури/миші (HID)
+#define CFG_TUH_DEVICE_MAX          (CFG_TUH_HUB ? 4 : 1) 
+#define CFG_TUH_HID                 4 
+
 //------------- HID -------------//
 #define CFG_TUH_HID_EPIN_BUFSIZE    64
-//#define CFG_TUH_HID_EPOUT_BUFSIZE   64
-// not sure we send much
-#define CFG_TUH_HID_EPOUT_BUFSIZE   16
+#define CFG_TUH_HID_EPOUT_BUFSIZE   64
 
 #ifdef __cplusplus
  }

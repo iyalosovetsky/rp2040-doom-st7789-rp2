@@ -604,6 +604,7 @@ function(add_doom_tiny SUFFIX RENDER_LIB)
         pico_enable_stdio_uart(doom_tiny${SUFFIX} 0)
     endif()
     # dahai
+    pico_enable_stdio_usb(doom_tiny${SUFFIX} 1)   # printf through USB CDC console
     pico_enable_stdio_uart(doom_tiny${SUFFIX} 0)
 
 endfunction()
@@ -655,21 +656,21 @@ if (PICO_SDK)
             #TINY_WAD_ADDR=0x10048000
             TINY_WAD_ADDR=0x10050000
             )
-    # if (PICO_ON_DEVICE AND PICO_DOOM_USB)
-    #     suppress_tinyusb_warnings()
-    #     add_doom_tiny(_usb render_newhope)
-    #     target_link_libraries(doom_tiny_usb PRIVATE tiny_settings pico_cd)
-    #     target_compile_definitions(doom_tiny_usb PRIVATE
-    #             USB_SUPPORT=1
-    #             TINY_WAD_ADDR=0x10050000 # ugh tinyusb is >8K currently!!
-    #     )
-    #     add_doom_tiny(_nost_usb render_newhope)
-    #     target_link_libraries(doom_tiny_nost_usb PRIVATE pico_cd)
-    #     target_compile_definitions(doom_tiny_nost_usb PRIVATE
-    #             USB_SUPPORT=1
-    #             TINY_WAD_ADDR=0x10050000
-    #             )
-    # endif()
+    if (PICO_ON_DEVICE AND PICO_DOOM_USB)
+        suppress_tinyusb_warnings()
+        add_doom_tiny(_usb render_newhope)
+        target_link_libraries(doom_tiny_usb PRIVATE tiny_settings pico_cd)
+        target_compile_definitions(doom_tiny_usb PRIVATE
+                USB_SUPPORT=1
+                TINY_WAD_ADDR=0x10050000 # ugh tinyusb is >8K currently!!
+        )
+        add_doom_tiny(_nost_usb render_newhope)
+        target_link_libraries(doom_tiny_nost_usb PRIVATE pico_cd)
+        target_compile_definitions(doom_tiny_nost_usb PRIVATE
+                USB_SUPPORT=1
+                TINY_WAD_ADDR=0x10050000
+                )
+    endif()
 endif()
 
 

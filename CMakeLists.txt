@@ -6,6 +6,10 @@ include(prebuilt_tools.cmake)
 
 # Pull in SDK (must be before project)
 if (PICO_SDK_PATH)
+    # Set custom USB pins - D+ on GP2, D- on GP3 
+    set(PICO_USB_DP_PIN 2)
+    set(PICO_USB_DM_PIN 3)
+    
     include(pico_sdk_import.cmake)
     include(pico_extras_import.cmake)
 endif()
